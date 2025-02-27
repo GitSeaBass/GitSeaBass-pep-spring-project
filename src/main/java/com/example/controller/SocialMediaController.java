@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Message;
@@ -31,5 +32,7 @@ public class SocialMediaController {
     }
 
     @GetMapping("messages/{message_id}")
-    public ResponseEntity<Message>
+    public ResponseEntity<Message> getMessageById(@PathVariable int message_id) {
+        return ResponseEntity.status(200).body(messageService.getMessageById(message_id));
+    }
 }
