@@ -9,6 +9,7 @@ import com.example.entity.Message;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
+    public <S extends Message> S save(S message);
     public List<Message> findAll();
     public Message findByMessageId(int messageId);
 }
