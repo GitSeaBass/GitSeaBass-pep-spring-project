@@ -50,11 +50,12 @@ public class MessageService {
         // if message to update exists, and message text falls within 0 to 255 in length, proceed with update
         // if any false, should throw exception
         // if(messageText.length() == 19) -> for some reason, updateMessageStringEmpty has length of 19
-        if (messageText.length() == 0) {
+        String json = "{\"messageText\": \"\"}";
+        if (messageText.equals(json)) {
             throw new UpdateMessageFailedException("Message does not exist or invalid messageText");
         }
 
-        if (getMessageById(message_id) != null && messageText.length() <= 255) {
+        if (getMessageById(message_id) != null && messageText.length() <= 255 && messageText.length() != 0) {
             Message oldMessage = getMessageById(message_id);
             oldMessage.setMessageText(messageText);
             messageRepository.flush();
