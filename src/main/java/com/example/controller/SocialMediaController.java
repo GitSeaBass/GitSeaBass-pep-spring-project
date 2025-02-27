@@ -19,6 +19,7 @@ import com.example.entity.Message;
 import com.example.exception.DeleteMessageNotFoundException;
 import com.example.exception.InvalidBodyException;
 import com.example.exception.UpdateMessageFailedException;
+import com.example.service.AccountService;
 import com.example.service.MessageService;
 
 /**
@@ -30,10 +31,12 @@ import com.example.service.MessageService;
 @RestController
 public class SocialMediaController {
     private MessageService messageService;
+    private AccountService accountService;
 
     @Autowired
     public SocialMediaController(MessageService messageService) {
         this.messageService = messageService;
+        this.accountService = accountService;
     }
 
     @PostMapping("messages")
@@ -60,7 +63,7 @@ public class SocialMediaController {
     public ResponseEntity<Integer> patchMessageById(@PathVariable int message_id, @RequestBody String messageText) {
         return ResponseEntity.status(200).body(messageService.patchMessageById(message_id, messageText));
     }
-    
+
 
     @ExceptionHandler(InvalidBodyException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
