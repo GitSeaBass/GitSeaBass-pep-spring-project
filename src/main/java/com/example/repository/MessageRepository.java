@@ -12,4 +12,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     public <S extends Message> S save(S message);
     public List<Message> findAll();
     public Message findByMessageId(int messageId);
+    public void delete(Message message);
+    public void flush();
 }
