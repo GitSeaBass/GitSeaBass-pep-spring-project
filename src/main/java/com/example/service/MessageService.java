@@ -63,4 +63,8 @@ public class MessageService {
         }
         throw new UpdateMessageFailedException("Message does not exist or invalid messageText");
     }
+
+    public List<Message> getMessagesByAccountId(int account_id) {
+        return messageRepository.findByPostedBy(account_id);
+    }
 }

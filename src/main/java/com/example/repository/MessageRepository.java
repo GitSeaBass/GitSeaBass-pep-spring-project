@@ -14,4 +14,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     public Message findByMessageId(int messageId);
     public void delete(Message message);
     public void flush();
+    public List<Message> findByPostedBy(int accountId);
 }

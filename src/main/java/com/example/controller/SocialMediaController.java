@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.exception.DeleteMessageNotFoundException;
 import com.example.exception.InvalidBodyException;
@@ -62,6 +63,16 @@ public class SocialMediaController {
     @PatchMapping("messages/{message_id}")
     public ResponseEntity<Integer> patchMessageById(@PathVariable int message_id, @RequestBody String messageText) {
         return ResponseEntity.status(200).body(messageService.patchMessageById(message_id, messageText));
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
+        return ResponseEntity.status(200).body(accountService.postAccount(account));
+    }
+
+    @GetMapping("accounts/{account_id}/messages")
+    public ResponseEntity<List<Message>> getMessagesByAccountId(@PathVariable int account_id) {
+        return ResponseEntity.status(200).body(messageService.getMessagesByAccountId(account_id));
     }
 
 
