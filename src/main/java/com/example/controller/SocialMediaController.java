@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Account;
 import com.example.entity.Message;
+import com.example.exception.ConflictingUsernameException;
 import com.example.exception.DeleteMessageNotFoundException;
 import com.example.exception.InvalidBodyException;
+import com.example.exception.UnauthorizedLoginException;
 import com.example.exception.UpdateMessageFailedException;
 import com.example.service.AccountService;
 import com.example.service.MessageService;
@@ -35,7 +37,7 @@ public class SocialMediaController {
     private AccountService accountService;
 
     @Autowired
-    public SocialMediaController(MessageService messageService) {
+    public SocialMediaController(MessageService messageService, AccountService accountService) {
         this.messageService = messageService;
         this.accountService = accountService;
     }
@@ -64,10 +66,15 @@ public class SocialMediaController {
     public ResponseEntity<Integer> patchMessageById(@PathVariable int message_id, @RequestBody String messageText) {
         return ResponseEntity.status(200).body(messageService.patchMessageById(message_id, messageText));
     }
-
+ 
     @PostMapping("register")
     public ResponseEntity<Account> registerAccount(@RequestBody Account account) {
         return ResponseEntity.status(200).body(accountService.postAccount(account));
+    }
+
+    @PostMapping("login")
+    public ResponseEntity<Account> login(@RequestBody Account account) {
+        return ResponseEntity.status(200).body(accountService.login(account));
     }
 
     @GetMapping("accounts/{account_id}/messages")
@@ -87,4 +94,12 @@ public class SocialMediaController {
     @ExceptionHandler(UpdateMessageFailedException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public String handleUpdateMessageFailedException(UpdateMessageFailedException ex) {return ex.getMessage();}
+
+    @ExceptionHandler(ConflictingUsernameException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    public void handleConflictingUsernameException(ConflictingUsernameException ex) { }
+
+    @ExceptionHandler(UnauthorizedLoginException.class)
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    public void handleUnauthorizedLoginException(UnauthorizedLoginException ex) { }
 }

@@ -9,21 +9,27 @@ import com.example.entity.Message;
 import com.example.exception.DeleteMessageNotFoundException;
 import com.example.exception.InvalidBodyException;
 import com.example.exception.UpdateMessageFailedException;
+import com.example.repository.AccountRepository;
 import com.example.repository.MessageRepository;
 
 @Service
 public class MessageService {
     private MessageRepository messageRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
-    public MessageService(MessageRepository messageRepository) {
+    public MessageService(MessageRepository messageRepository, AccountRepository accountRepository) {
         this.messageRepository = messageRepository;
+        this.accountRepository = accountRepository;
     }
 
     public Message createNewMessage(Message message) throws InvalidBodyException {
         // fails if message_text blank, over 255 length, and posted by real user
         if (message.getMessageText().length() == 0 || message.getMessageText().length() >= 255) {
             throw new InvalidBodyException("Message is Invalid");
+        }
+        if (accountRepository.findByAccountId(message.getPostedBy()) == null) {
+            throw new InvalidBodyException("That account does not exist");
         }
         return messageRepository.save(message);
     }
